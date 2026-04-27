@@ -339,26 +339,72 @@
       );
     };
 
-    // TELA 3: KANBAN
+    // TELA 3: KANBAN (DRAG AND DROP INTEGRADO)
     const KanbanTab = () => {
-      const columns = [
-        { title: "Backlog (Gargalos)", color: "border-bordercolor", items: ["Auditoria Comercial", "Revisão LTV"] },
-        { title: "Em Execução", color: "border-brand", items: ["Treinamento Script de Vendas (Tech Solutions)"] },
-        { title: "Concluído", color: "border-emerald-500/50", items: ["Diagnóstico Inicial"] }
-      ];
+      const [columns, setColumns] = useState([
+        { id: 'col1', title: "Backlog (Gargalos)", color: "border-bordercolor", items: [{ id: 't1', text: "Auditoria Comercial" }, { id: 't2', text: "Revisão LTV" }] },
+        { id: 'col2', title: "Em Execução", color: "border-brand", items: [{ id: 't3', text: "Treinamento Script de Vendas (Tech Solutions)" }] },
+        { id: 'col3', title: "Concluído", color: "border-emerald-500/50", items: [{ id: 't4', text: "Diagnóstico Inicial" }] }
+      ]);
+      const [draggedItem, setDraggedItem] = useState(null);
+
+      const handleDragStart = (e, item, sourceColId) => {
+        setDraggedItem({ item, sourceColId });
+        e.target.style.opacity = '0.5';
+      };
+
+      const handleDragEnd = (e) => {
+        e.target.style.opacity = '1';
+        setDraggedItem(null);
+      };
+
+      const handleDragOver = (e) => { e.preventDefault(); };
+
+      const handleDrop = (e, targetColId) => {
+        e.preventDefault();
+        if (!draggedItem) return;
+
+        if (draggedItem.sourceColId === targetColId) return;
+
+        setColumns(prev => prev.map(col => {
+          if (col.id === draggedItem.sourceColId) {
+            return { ...col, items: col.items.filter(i => i.id !== draggedItem.item.id) };
+          }
+          if (col.id === targetColId) {
+            return { ...col, items: [...col.items, draggedItem.item] };
+          }
+          return col;
+        }));
+      };
+
       return (
         <section className="pt-40 pb-24 px-6 min-h-[100dvh]">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-4xl font-bold mb-4 text-content flex items-center gap-4"><IconKanban /> Plano de Ação dos Experts</h1>
-            <p className="text-muted mb-12">Tarefas de consultoria executadas pelo Expert.</p>
+            <p className="text-muted mb-12">Arraste os cartões entre as colunas para simular a execução pelo Expert.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {columns.map((col, idx) => (
-                <div key={idx} className={`bg-surface border-t-4 ${col.color} border-x border-b rounded-2xl p-6 shadow-lg`}>
-                  <h3 className="font-bold text-lg mb-6 text-content">{col.title}</h3>
-                  <div className="space-y-4">
-                    {col.items.map((item, i) => (
-                      <div key={i} className="bg-background border border-bordercolor p-4 rounded-xl cursor-pointer">
-                        <h4 className="text-content font-medium text-sm">{item}</h4>
+              {columns.map((col) => (
+                <div 
+                  key={col.id} 
+                  className={`bg-surface border-t-4 ${col.color} border-x border-b rounded-2xl p-6 shadow-lg min-h-[300px] transition-colors`}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, col.id)}
+                >
+                  <h3 className="font-bold text-lg mb-6 text-content flex justify-between">{col.title} <span className="text-muted text-sm font-normal">{col.items.length}</span></h3>
+                  <div className="space-y-4 min-h-[200px]">
+                    {col.items.map((item) => (
+                      <div 
+                        key={item.id} 
+                        draggable="true"
+                        onDragStart={(e) => handleDragStart(e, item, col.id)}
+                        onDragEnd={handleDragEnd}
+                        className="bg-background border border-bordercolor p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-brand/50 hover:shadow-md transition-all"
+                      >
+                        <h4 className="text-content font-medium text-sm select-none">{item.text}</h4>
+                        <div className="mt-3 flex justify-between items-center">
+                          <span className="text-[10px] uppercase font-bold bg-surface border border-bordercolor px-2 py-1 rounded text-muted">Ação Prática</span>
+                          <img src={`https://i.pravatar.cc/150?img=${item.id.replace('t','') * 10}`} className="w-5 h-5 rounded-full" />
+                        </div>
                       </div>
                     ))}
                   </div>
