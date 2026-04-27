@@ -5,19 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Expert Gestão | Plataforma SaaS</title>
   
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
   
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- GSAP & ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  
-  <!-- React & ReactDOM -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -45,51 +39,18 @@
       --brand-text: #0D0D12;
     }
     
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    
+    body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; }
     .font-drama { font-family: 'Playfair Display', serif; }
-
-    .noise-overlay {
-      position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.04;
-      background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-    }
-
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg-color); }
-    ::-webkit-scrollbar-thumb { background: var(--surface-border); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--brand-color); }
-
-    .magnetic-btn { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-    .magnetic-btn:hover { transform: scale(1.03); }
-    
+    .noise-overlay { position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.04; background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E'); }
+    ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--bg-color); } ::-webkit-scrollbar-thumb { background: var(--surface-border); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: var(--brand-color); }
+    .magnetic-btn { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); } .magnetic-btn:hover { transform: scale(1.03); }
     .hero-gradient { background: linear-gradient(to top, var(--bg-color) 0%, transparent 100%); }
+    .scanner-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--brand-color); box-shadow: 0 0 10px var(--brand-color); animation: scan 2s linear infinite; }
+    @keyframes scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
   </style>
   
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            background: 'var(--bg-color)',
-            content: 'var(--text-color)',
-            muted: 'var(--text-muted)',
-            surface: 'var(--surface-color)',
-            bordercolor: 'var(--surface-border)',
-            brand: 'var(--brand-color)',
-            brandhover: 'var(--brand-hover)',
-            brandtext: 'var(--brand-text)'
-          },
-          fontFamily: { sans: ['Inter', 'sans-serif'], drama: ['Playfair Display', 'serif'] }
-        }
-      }
-    }
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { background: 'var(--bg-color)', content: 'var(--text-color)', muted: 'var(--text-muted)', surface: 'var(--surface-color)', bordercolor: 'var(--surface-border)', brand: 'var(--brand-color)', brandhover: 'var(--brand-hover)', brandtext: 'var(--brand-text)' }, fontFamily: { sans: ['Inter', 'sans-serif'], drama: ['Playfair Display', 'serif'] } } } }
   </script>
 </head>
 <body>
@@ -100,18 +61,18 @@
     const { useState, useEffect, useRef, useLayoutEffect } = React;
     gsap.registerPlugin(ScrollTrigger);
 
-    // Ícones
-    const IconArrowRight = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>;
-    const IconActivity = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>;
     const IconTrendingUp = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
     const IconTrendingDown = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>;
     const IconClock = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+    const IconActivity = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>;
     const IconSun = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>;
     const IconMoon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>;
     const IconKanban = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 7v7"/><path d="M12 7v4"/><path d="M16 7v9"/></svg>;
     const IconUsers = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
+    const IconCpu = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>;
+    const IconFilter = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>;
 
-    // Componente: Navbar (Com Abas Clicáveis)
+    // Navbar
     const Navbar = ({ isDark, toggleTheme, activeTab, setActiveTab }) => {
       const navRef = useRef(null);
 
@@ -130,29 +91,28 @@
       }, []);
 
       const tabs = [
-        { id: 'dashboard', label: 'Dashboard Geral' },
-        { id: 'kanban', label: 'Plano de Ação (Kanban)' },
-        { id: 'experts', label: 'Lista de Experts' },
+        { id: 'form', label: '1. Simulador' },
+        { id: 'crm', label: '2. CRM IA Híbrido' },
+        { id: 'dashboard', label: '3. Painel Expert' },
+        { id: 'kanban', label: '4. Kanban' },
       ];
 
       return (
         <nav ref={navRef} className="fixed top-0 left-0 w-full z-40 transition-all duration-500 border-b border-transparent py-6 shadow-none">
-          <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            {/* Logo */}
-            <div className="text-xl font-bold tracking-tight text-content flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
+          <div className="max-w-[90rem] mx-auto px-6 flex justify-between items-center">
+            <div className="text-xl font-bold tracking-tight text-content flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('form')}>
               <div className="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-brandtext">
                 <IconTrendingUp />
               </div>
-              <div>EXPERT<span className="text-brand font-drama italic font-normal">Gestão</span></div>
+              <div className="hidden sm:block">EXPERT<span className="text-brand font-drama italic font-normal">Gestão</span></div>
             </div>
             
-            {/* Tabs */}
-            <div className="hidden md:flex gap-8 text-sm font-medium">
+            <div className="hidden lg:flex gap-8 text-sm font-medium">
               {tabs.map(tab => (
                 <button 
                   key={tab.id}
                   onClick={() => { setActiveTab(tab.id); window.scrollTo(0,0); }}
-                  className={`transition-all pb-1 border-b-2 ${activeTab === tab.id ? 'text-brand border-brand' : 'text-muted border-transparent hover:text-brand'}`}
+                  className={`transition-all pb-1 border-b-2 ${activeTab === tab.id ? 'text-brand border-brand font-bold' : 'text-muted border-transparent hover:text-brand'}`}
                 >
                   {tab.label}
                 </button>
@@ -163,8 +123,8 @@
               <button onClick={toggleTheme} className="text-muted hover:text-brand transition-colors p-2 rounded-full border border-bordercolor bg-surface">
                 {isDark ? <IconSun /> : <IconMoon />}
               </button>
-              <button className="magnetic-btn bg-brand text-brandtext px-6 py-2 rounded-full font-semibold text-sm flex items-center gap-2 overflow-hidden shadow-lg shadow-brand/20">
-                <span>Novo Diagnóstico</span>
+              <button onClick={() => { setActiveTab('form'); window.scrollTo(0,0); }} className="magnetic-btn bg-brand text-brandtext px-6 py-2 rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg shadow-brand/20">
+                <span>Novo Lead</span>
               </button>
             </div>
           </div>
@@ -172,29 +132,180 @@
       );
     };
 
-    // TELA 1: DASHBOARD GERAL
-    const DashboardTab = () => {
+    // TELA 0: SIMULADOR DE DIAGNÓSTICO
+    const DiagnosticFormTab = ({ setActiveTab }) => {
+      const [isAnalyzing, setIsAnalyzing] = useState(false);
+      const [step, setStep] = useState(0);
+
+      const analyzeLead = () => {
+        setIsAnalyzing(true);
+        setTimeout(() => setStep(1), 1000); 
+        setTimeout(() => setStep(2), 2500); 
+        setTimeout(() => setStep(3), 4000); 
+        setTimeout(() => { setIsAnalyzing(false); setActiveTab('crm'); }, 5000); // Redireciona pro CRM!
+      };
+
+      if (isAnalyzing) {
+        return (
+          <section className="pt-40 pb-24 px-6 min-h-[100dvh] flex items-center justify-center">
+            <div className="bg-surface border border-brand/50 rounded-[2rem] p-10 max-w-md w-full text-center relative overflow-hidden shadow-2xl shadow-brand/20">
+              <div className="scanner-line"></div>
+              <div className="w-20 h-20 mx-auto mb-6 bg-brand/10 text-brand rounded-full flex items-center justify-center animate-pulse"><IconCpu width="40" height="40" /></div>
+              <h2 className="text-2xl font-bold text-content mb-2 font-drama italic">Processamento n8n + AI</h2>
+              <p className="text-muted mb-8">Qualificando Lead e definindo temperatura de compra...</p>
+              
+              <div className="space-y-4 text-sm font-mono text-left">
+                <div className={`p-3 rounded-lg border ${step >= 1 ? 'border-brand text-brand bg-brand/5' : 'border-bordercolor text-muted bg-background'}`}>
+                  {step >= 1 ? '✓ Lead Capturado (Webhook)' : 'Aguardando Webhook...'}
+                </div>
+                <div className={`p-3 rounded-lg border ${step >= 2 ? 'border-brand text-brand bg-brand/5' : 'border-bordercolor text-muted bg-background'}`}>
+                  {step >= 2 ? '✓ IA: Reação no WhatsApp = Quente' : 'Analisando histórico e reações...'}
+                </div>
+                <div className={`p-3 rounded-lg border ${step >= 3 ? 'border-emerald-500 text-emerald-500 bg-emerald-500/5' : 'border-bordercolor text-muted bg-background'}`}>
+                  {step >= 3 ? '✓ Enviando para CRM (Pipeline de Vendas)' : 'Roteando para Expert adequado...'}
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      return (
+        <section className="pt-40 pb-24 px-6 min-h-[100dvh] flex items-center justify-center">
+          <div className="bg-surface border border-bordercolor rounded-[2rem] p-10 max-w-2xl w-full shadow-xl">
+            <div className="text-center mb-10">
+              <span className="bg-brand/10 text-brand px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase mb-4 inline-block">Módulo de Captura</span>
+              <h1 className="text-4xl font-bold text-content mb-3">Entrada do Lead</h1>
+              <p className="text-muted">Simule um Lead preenchendo o diagnóstico. O n8n capturará os dados e atualizará o CRM Híbrido.</p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-muted mb-2">Nome da Empresa</label>
+                  <input type="text" defaultValue="Tech Solutions Ltda" className="w-full bg-background border border-bordercolor text-content p-4 rounded-xl focus:border-brand outline-none transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-muted mb-2">Faturamento Atual Mensal</label>
+                  <select className="w-full bg-background border border-bordercolor text-content p-4 rounded-xl focus:border-brand outline-none transition-colors">
+                    <option selected>R$ 100k a R$ 300k</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-muted mb-2">Engajamento Automático Detectado</label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-bordercolor bg-background text-muted p-4 rounded-xl text-center">Frio (Apenas visualizou)</div>
+                  <div className="border border-bordercolor bg-background text-muted p-4 rounded-xl text-center">Morno (Clicou no Link)</div>
+                  <div className="border border-red-500 bg-red-500/10 text-red-500 p-4 rounded-xl text-center font-medium">Super Quente (Respondeu o Bot)</div>
+                </div>
+              </div>
+
+              <div className="pt-6">
+                <button onClick={analyzeLead} className="magnetic-btn w-full bg-brand text-brandtext p-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-brandhover shadow-lg shadow-brand/20">
+                  <IconCpu /> Qualificar e Enviar pro CRM
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // TELA 1.5: CRM HÍBRIDO (COM INTELIGÊNCIA ARTIFICIAL)
+    const CRMTab = () => {
       const comp = useRef(null);
 
       useLayoutEffect(() => {
         let ctx = gsap.context(() => {
-          gsap.from(".hero-anim", { y: 40, opacity: 0, duration: 1.2, stagger: 0.15, ease: "power3.out", delay: 0.2 });
-          gsap.from(".kpi-card", { scrollTrigger: { trigger: ".kpis-section", start: "top 80%" }, y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" });
-          gsap.from(".expert-item", { scrollTrigger: { trigger: ".expert-section", start: "top 75%" }, x: -50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out" });
+          gsap.from(".crm-column", { y: 20, opacity: 0, duration: 0.5, stagger: 0.1 });
         }, comp);
         return () => ctx.revert();
       }, []);
 
-      const kpis = [
-        { title: "Taxa de Vendas", value: "R$ 124.500", trend: "+12%", status: "positive", icon: <IconTrendingUp /> },
-        { title: "Ineficiência", value: "28%", trend: "Perda: R$ 34k", status: "critical", icon: <IconTrendingDown /> },
-        { title: "Velocidade", value: "4.2 Dias", trend: "Estável", status: "neutral", icon: <IconClock /> },
-        { title: "Ticket Médio", value: "R$ 1.850", trend: "+5%", status: "positive", icon: <IconActivity /> },
-      ];
-
       return (
-        <div ref={comp}>
-          {/* Hero */}
+        <section ref={comp} className="pt-40 pb-24 px-6 min-h-[100dvh]">
+          <div className="max-w-[90rem] mx-auto">
+            <div className="flex justify-between items-center mb-10">
+              <div>
+                <h1 className="text-4xl font-bold mb-2 text-content flex items-center gap-4"><IconFilter /> CRM Híbrido Avalancha</h1>
+                <p className="text-muted">Leads qualificados e atualizados automaticamente pela Inteligência Artificial (n8n).</p>
+              </div>
+              <div className="bg-surface border border-bordercolor p-2 rounded-lg text-sm font-mono text-muted flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-brand animate-pulse"></div> Auto-Update: ATIVO
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              
+              {/* Lead Frio */}
+              <div className="crm-column bg-surface border-t-4 border-slate-500 border-x border-b rounded-2xl p-4">
+                <h3 className="font-bold text-sm mb-4 text-content flex justify-between">🧊 Frio (Pesquisa) <span className="bg-background px-2 rounded">2</span></h3>
+                <div className="space-y-3">
+                  <div className="bg-background border border-bordercolor p-3 rounded-lg">
+                    <h4 className="font-bold text-sm text-content">Distribuidora XYZ</h4>
+                    <p className="text-xs text-muted mb-2">R$ 50k / Mês</p>
+                    <div className="text-[10px] bg-slate-500/10 text-slate-500 px-2 py-1 rounded">IA: Apenas visualizou o anúncio</div>
+                  </div>
+                  <div className="bg-background border border-bordercolor p-3 rounded-lg">
+                    <h4 className="font-bold text-sm text-content">Consultoria ABC</h4>
+                    <p className="text-xs text-muted mb-2">R$ 80k / Mês</p>
+                    <div className="text-[10px] bg-slate-500/10 text-slate-500 px-2 py-1 rounded">IA: Abandonou Formulário</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lead Morno */}
+              <div className="crm-column bg-surface border-t-4 border-amber-500 border-x border-b rounded-2xl p-4">
+                <h3 className="font-bold text-sm mb-4 text-content flex justify-between">🔥 Morno (Consideração) <span className="bg-background px-2 rounded">1</span></h3>
+                <div className="space-y-3">
+                  <div className="bg-background border border-bordercolor p-3 rounded-lg">
+                    <h4 className="font-bold text-sm text-content">Loja do Centro</h4>
+                    <p className="text-xs text-muted mb-2">R$ 150k / Mês</p>
+                    <div className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-1 rounded">IA: Clicou no link de WhatsApp (Aguardando Mensagem)</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lead Quente / Super Quente */}
+              <div className="crm-column bg-surface border-t-4 border-red-500 border-x border-b rounded-2xl p-4 shadow-lg">
+                <h3 className="font-bold text-sm mb-4 text-content flex justify-between">🚨 Super Quente (Pronto) <span className="bg-red-500/20 text-red-500 px-2 rounded">Novo!</span></h3>
+                <div className="space-y-3">
+                  <div className="bg-background border-2 border-red-500/50 p-3 rounded-lg shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                    <h4 className="font-bold text-sm text-content">Tech Solutions Ltda</h4>
+                    <p className="text-xs text-muted mb-2">R$ 300k / Mês</p>
+                    <div className="text-[10px] bg-red-500/20 text-red-500 font-bold px-2 py-1 rounded mb-2">IA: Respondeu Bot, pediu preço!</div>
+                    <button className="w-full bg-brand text-brandtext text-xs py-1.5 rounded font-bold hover:opacity-80">Enviar para Expert</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Convertido / Cliente */}
+              <div className="crm-column bg-surface border-t-4 border-emerald-500 border-x border-b rounded-2xl p-4">
+                <h3 className="font-bold text-sm mb-4 text-content flex justify-between">✅ Convertidos (Clientes) <span className="bg-background px-2 rounded">3</span></h3>
+                <div className="space-y-3 opacity-70 hover:opacity-100 transition-opacity">
+                  <div className="bg-background border border-emerald-500/30 p-3 rounded-lg">
+                    <h4 className="font-bold text-sm text-content line-through">Grupo Alfa</h4>
+                    <p className="text-xs text-emerald-500 font-bold">Fechado: R$ 5.000,00</p>
+                  </div>
+                  <div className="bg-background border border-emerald-500/30 p-3 rounded-lg">
+                    <h4 className="font-bold text-sm text-content line-through">Varejo Sul</h4>
+                    <p className="text-xs text-emerald-500 font-bold">Fechado: R$ 8.500,00</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // TELA 2: DASHBOARD GERAL E EXPERTS
+    const DashboardTab = () => {
+      return (
+        <div>
           <section className="relative pt-40 pb-24 px-6 border-b border-bordercolor">
             <div className="absolute inset-0 z-0">
               <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover opacity-20 dark:opacity-40" />
@@ -202,57 +313,25 @@
             </div>
             <div className="relative z-10 max-w-7xl mx-auto w-full">
               <div className="max-w-4xl">
-                <div className="hero-anim inline-block border border-brand/30 text-brand bg-brand/5 px-4 py-1 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">Visão Consolidada: Empresa Cliente S/A</div>
+                <div className="inline-block border border-brand/30 text-brand bg-brand/5 px-4 py-1 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">Visão do Cliente: Tech Solutions Ltda</div>
                 <h1 className="text-5xl md:text-7xl leading-tight mb-8">
-                  <span className="hero-anim block font-bold tracking-tight text-content">Escalabilidade</span>
-                  <span className="hero-anim block font-drama italic text-brand font-light">absoluta.</span>
+                  <span className="block font-bold tracking-tight text-content">Gargalo Crítico</span>
+                  <span className="block font-drama italic text-brand font-light">detectado.</span>
                 </h1>
-                <p className="hero-anim text-lg md:text-xl text-muted max-w-2xl mb-10 font-light">O sistema detectou 1 gargalo de alta prioridade. Acione o Expert Marcos Almeida para conter a perda de R$34k.</p>
+                <p className="text-lg md:text-xl text-muted max-w-2xl font-light">Após conversão no CRM, a IA escalou este projeto para o Expert de Recuperação de Vendas para evitar a sangria de R$34k/mês.</p>
               </div>
             </div>
           </section>
-
-          {/* KPIs */}
-          <section className="kpis-section py-24 bg-background relative z-10 px-6">
-            <div className="max-w-7xl mx-auto">
-              <h2 className="text-3xl font-bold mb-8 text-content">Métricas <span className="font-drama italic text-brand font-light">Avalancha</span></h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {kpis.map((kpi, index) => (
-                  <div key={index} className="kpi-card bg-surface border border-bordercolor rounded-[2rem] p-8 relative overflow-hidden shadow-xl shadow-black/5">
-                    <div className={`absolute top-0 right-0 w-32 h-32 blur-3xl opacity-10 ${kpi.status === 'critical' ? 'bg-red-500' : kpi.status === 'positive' ? 'bg-emerald-500' : 'bg-brand'}`}></div>
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-6 relative z-10 ${kpi.status === 'critical' ? 'bg-red-500/10 text-red-500' : kpi.status === 'positive' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-brand/10 text-brand'}`}>
-                      {kpi.icon}
-                    </div>
-                    <h3 className="text-muted font-medium mb-2">{kpi.title}</h3>
-                    <div className="text-3xl font-bold font-drama text-content mb-4">{kpi.value}</div>
-                    <div className={`text-sm font-medium ${kpi.status === 'critical' ? 'text-red-500' : kpi.status === 'positive' ? 'text-emerald-500' : 'text-brand'}`}>{kpi.trend}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Expert Match */}
-          <section className="expert-section py-24 bg-surface relative z-10 px-6 border-t border-bordercolor">
-            <div className="max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                  <h2 className="text-4xl font-bold mb-6 text-content">Gargalo Crítico Detectado</h2>
-                  <div className="expert-item bg-background border border-red-500/20 rounded-[2rem] p-6 flex flex-col sm:flex-row gap-6 items-center shadow-lg mb-6">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop" className="w-16 h-16 rounded-full object-cover border-2 border-bordercolor" />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-1">
-                        <h4 className="font-bold text-lg text-content">Marcos Almeida</h4>
-                        <span className="text-xs font-mono bg-red-500/10 text-red-500 px-2 py-1 rounded-full border border-red-500/20">ALERTA VERMELHO</span>
-                      </div>
-                      <p className="text-sm text-muted">Vendas & Ineficiência. Custo do Gargalo: R$34k / mês.</p>
-                    </div>
-                    <button className="magnetic-btn bg-red-500 text-white px-5 py-2.5 rounded-[2rem] text-sm font-bold">Acionar Plano</button>
-                  </div>
-                </div>
-                <div className="relative hidden lg:block">
-                  <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop" className="rounded-[3rem] grayscale-[0.2] border border-bordercolor object-cover h-[400px] w-full" />
-                </div>
+          {/* Section Experts - Resumido */}
+          <section className="py-24 bg-background relative z-10 px-6">
+            <div className="max-w-7xl mx-auto text-center">
+              <h2 className="text-3xl font-bold mb-8 text-content">Expert Alocado</h2>
+              <div className="inline-flex items-center gap-6 bg-surface border border-brand/30 p-6 rounded-3xl shadow-xl">
+                 <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop" className="w-20 h-20 rounded-full object-cover border-2 border-brand" />
+                 <div className="text-left">
+                   <h3 className="text-2xl font-bold text-content">Marcos Almeida</h3>
+                   <p className="text-muted">Responsável por solucionar: Perda de Vendas</p>
+                 </div>
               </div>
             </div>
           </section>
@@ -260,40 +339,25 @@
       );
     };
 
-    // TELA 2: PLANO DE AÇÃO (KANBAN)
+    // TELA 3: KANBAN
     const KanbanTab = () => {
-      const comp = useRef(null);
-
-      useLayoutEffect(() => {
-        let ctx = gsap.context(() => {
-          gsap.from(".kanban-board", { y: 20, opacity: 0, duration: 0.5, stagger: 0.1 });
-        }, comp);
-        return () => ctx.revert();
-      }, []);
-
       const columns = [
         { title: "Backlog (Gargalos)", color: "border-bordercolor", items: ["Auditoria Comercial", "Revisão LTV"] },
-        { title: "Em Execução", color: "border-brand", items: ["Treinamento Script de Vendas (Marcos)", "Otimização Velocidade (Lead/Venda)"] },
-        { title: "Concluído", color: "border-emerald-500/50", items: ["Setup CRM", "Diagnóstico Inicial"] }
+        { title: "Em Execução", color: "border-brand", items: ["Treinamento Script de Vendas (Tech Solutions)"] },
+        { title: "Concluído", color: "border-emerald-500/50", items: ["Diagnóstico Inicial"] }
       ];
-
       return (
-        <section ref={comp} className="pt-40 pb-24 px-6 min-h-[100dvh]">
+        <section className="pt-40 pb-24 px-6 min-h-[100dvh]">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-4xl font-bold mb-4 text-content flex items-center gap-4"><IconKanban /> Plano de Ação dos Experts</h1>
-            <p className="text-muted mb-12">Acompanhe a execução dos planos de ação para mitigar os gargalos.</p>
-            
+            <p className="text-muted mb-12">Tarefas de consultoria executadas pelo Expert.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {columns.map((col, idx) => (
-                <div key={idx} className={`kanban-board bg-surface border-t-4 ${col.color} border-x border-b rounded-2xl p-6 shadow-lg shadow-black/5`}>
-                  <h3 className="font-bold text-lg mb-6 text-content">{col.title} <span className="text-muted text-sm font-normal">({col.items.length})</span></h3>
+                <div key={idx} className={`bg-surface border-t-4 ${col.color} border-x border-b rounded-2xl p-6 shadow-lg`}>
+                  <h3 className="font-bold text-lg mb-6 text-content">{col.title}</h3>
                   <div className="space-y-4">
                     {col.items.map((item, i) => (
-                      <div key={i} className="bg-background border border-bordercolor p-4 rounded-xl cursor-pointer hover:border-brand/50 transition-colors">
-                        <div className="flex justify-between items-start mb-2">
-                          <span className="text-xs bg-surface border border-bordercolor px-2 py-0.5 rounded text-muted">Avalancha</span>
-                          <img src={`https://i.pravatar.cc/150?img=${i+10}`} className="w-6 h-6 rounded-full" />
-                        </div>
+                      <div key={i} className="bg-background border border-bordercolor p-4 rounded-xl cursor-pointer">
                         <h4 className="text-content font-medium text-sm">{item}</h4>
                       </div>
                     ))}
@@ -306,53 +370,9 @@
       );
     };
 
-    // TELA 3: LISTA DE EXPERTS
-    const ExpertsTab = () => {
-      const experts = [
-        { name: "Marcos Almeida", role: "Especialista em Vendas", status: "Ocupado", img: "68", clients: 4 },
-        { name: "Carla Mendes", role: "Retenção & LTV", status: "Livre", img: "47", clients: 1 },
-        { name: "Roberto Silva", role: "Gestão Financeira", status: "Livre", img: "11", clients: 2 },
-        { name: "Ana Beatriz", role: "Marketing de Aquisição", status: "Ocupado", img: "5", clients: 5 },
-      ];
-
-      return (
-        <section className="pt-40 pb-24 px-6 min-h-[100dvh]">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl font-bold mb-4 text-content flex items-center gap-4"><IconUsers /> Diretório de Experts</h1>
-            <p className="text-muted mb-12">Profissionais homologados prontos para assumir gargalos da plataforma.</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {experts.map((exp, i) => (
-                <div key={i} className="bg-surface border border-bordercolor rounded-3xl p-6 text-center hover:border-brand/30 transition-colors group">
-                  <div className="w-24 h-24 mx-auto mb-4 rounded-full p-1 border-2 border-brand/20">
-                    <img src={`https://i.pravatar.cc/150?img=${exp.img}`} className="w-full h-full rounded-full object-cover" />
-                  </div>
-                  <h3 className="text-lg font-bold text-content mb-1">{exp.name}</h3>
-                  <p className="text-sm text-muted mb-4">{exp.role}</p>
-                  <div className="flex justify-between items-center bg-background p-3 rounded-xl border border-bordercolor">
-                    <div className="text-left">
-                      <div className="text-xs text-muted">Status</div>
-                      <div className={`text-sm font-semibold ${exp.status === 'Livre' ? 'text-emerald-500' : 'text-brand'}`}>
-                        {exp.status}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs text-muted">Clientes</div>
-                      <div className="text-sm font-semibold text-content">{exp.clients}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // Main App
     const App = () => {
       const [isDark, setIsDark] = useState(true);
-      const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'kanban', 'experts'
+      const [activeTab, setActiveTab] = useState('form'); 
 
       useEffect(() => {
         if (isDark) { document.documentElement.classList.add('dark'); } 
@@ -364,21 +384,18 @@
       return (
         <div className="antialiased selection:bg-brand selection:text-brandtext transition-colors duration-300">
           <Navbar isDark={isDark} toggleTheme={toggleTheme} activeTab={activeTab} setActiveTab={setActiveTab} />
-          
           <main>
+            {activeTab === 'form' && <DiagnosticFormTab setActiveTab={setActiveTab} />}
+            {activeTab === 'crm' && <CRMTab />}
             {activeTab === 'dashboard' && <DashboardTab />}
             {activeTab === 'kanban' && <KanbanTab />}
-            {activeTab === 'experts' && <ExpertsTab />}
           </main>
-          
           <footer className="bg-surface pt-10 pb-10 px-6 rounded-t-[4rem] relative z-10 border-t border-bordercolor mt-10">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="text-xl font-bold text-content flex items-center gap-2">
-                EXPERT<span className="text-brand font-drama italic font-normal">Gestão</span>
-              </div>
+              <div className="text-xl font-bold text-content flex items-center gap-2">EXPERT<span className="text-brand font-drama italic font-normal">Gestão</span></div>
               <div className="flex items-center gap-3 bg-background border border-bordercolor px-4 py-2 rounded-full">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span className="text-xs font-mono text-emerald-500">SYSTEM OPERATIONAL - AI N8N INTEGRATION READY</span>
+                <span className="text-xs font-mono text-emerald-500">N8N AI AGENTS - ONLINE & READY</span>
               </div>
             </div>
           </footer>
