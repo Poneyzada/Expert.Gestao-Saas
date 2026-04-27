@@ -75,7 +75,7 @@ const CRMTab = () => {
                 </div>
                 <span style={{ background: `${col.color}18`, color: col.color, fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '999px' }}>{col.leads.length}</span>
               </div>
-              <div style={{ marginTop: '8px', height: '3px', borderRadius: '2px', background: `${col.color}30' }}>
+              <div style={{ marginTop: '8px', height: '3px', borderRadius: '2px', background: `${col.color}30` }}>
                 <div style={{ height: '100%', width: `${Math.min(col.leads.length * 20, 100)}%`, background: col.color, borderRadius: '2px', transition: 'width .4s' }} />
               </div>
             </div>
