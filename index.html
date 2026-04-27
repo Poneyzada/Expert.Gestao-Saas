@@ -3,492 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expert Gestão | Plataforma SaaS</title>
-  
+  <title>Expert Gestão | Plataforma Avalancha 60K</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
     :root {
-      --bg-color: #FAF8F5;
-      --text-color: #0D0D12;
-      --text-muted: rgba(13, 13, 18, 0.6);
-      --surface-color: #FFFFFF;
-      --surface-border: rgba(13, 13, 18, 0.1);
-      --brand-color: #C9A84C; 
-      --brand-hover: #b59540;
-      --brand-text: #ffffff;
+      --bg: #FAF8F5; --text: #0D0D12; --muted: rgba(13,13,18,0.55);
+      --surface: #FFFFFF; --border: rgba(13,13,18,0.1);
+      --brand: #C9A84C; --brand-h: #b59540; --brand-t: #fff;
+      --sidebar: #FFFFFF; --sidebar-w: 260px;
+      --danger: #ef4444; --success: #10b981; --warn: #f59e0b;
     }
-    
     .dark {
-      --bg-color: #0D0D12;
-      --text-color: #ffffff;
-      --text-muted: rgba(255, 255, 255, 0.6);
-      --surface-color: rgba(42, 42, 53, 0.4);
-      --surface-border: rgba(255, 255, 255, 0.1);
-      --brand-color: #C9A84C; 
-      --brand-hover: #e8cd7b;
-      --brand-text: #0D0D12;
+      --bg: #0B0B0F; --text: #F0EFE8; --muted: rgba(240,239,232,0.5);
+      --surface: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+      --brand: #C9A84C; --brand-h: #e8cd7b; --brand-t: #0B0B0F;
+      --sidebar: #111116;
     }
-    
-    body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Inter', sans-serif; overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; }
-    .font-drama { font-family: 'Playfair Display', serif; }
-    .noise-overlay { position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.04; background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E'); }
-    ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--bg-color); } ::-webkit-scrollbar-thumb { background: var(--surface-border); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: var(--brand-color); }
-    .magnetic-btn { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); } .magnetic-btn:hover { transform: scale(1.03); }
-    .hero-gradient { background: linear-gradient(to top, var(--bg-color) 0%, transparent 100%); }
-    .scanner-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--brand-color); box-shadow: 0 0 10px var(--brand-color); animation: scan 2s linear infinite; }
-    @keyframes scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; transition: background .3s, color .3s; }
+    #root { height: 100vh; display: flex; flex-direction: column; }
+    .app-shell { display: flex; flex: 1; overflow: hidden; }
+    .sidebar { width: var(--sidebar-w); background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; transition: width .3s; overflow: hidden; }
+    .main-content { flex: 1; overflow-y: auto; background: var(--bg); }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: all .2s; }
+    .btn-brand { background: var(--brand); color: var(--brand-t); } .btn-brand:hover { filter: brightness(1.1); transform: scale(1.02); }
+    .btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); } .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
+    .btn-danger { background: var(--danger); color: #fff; } .btn-danger:hover { filter: brightness(0.9); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+    .badge-hot { background: rgba(239,68,68,.12); color: var(--danger); }
+    .badge-warm { background: rgba(245,158,11,.12); color: var(--warn); }
+    .badge-cold { background: rgba(100,116,139,.12); color: #64748b; }
+    .badge-win { background: rgba(16,185,129,.12); color: var(--success); }
+    .badge-brand { background: rgba(201,168,76,.12); color: var(--brand); }
+    .tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+    input, select, textarea { background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 12px 16px; font-family: 'Inter', sans-serif; font-size: 14px; outline: none; width: 100%; transition: border-color .2s; }
+    input:focus, select:focus, textarea:focus { border-color: var(--brand); }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+    .noise { position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: .025; background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>'); }
+    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.4)} 50%{box-shadow:0 0 0 8px rgba(201,168,76,0)} }
+    @keyframes scan { 0%{top:0;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100%;opacity:0} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fadeUp .4s ease forwards; }
+    .kpi-critical { border-top: 3px solid var(--danger) !important; }
+    .kpi-good { border-top: 3px solid var(--success) !important; }
+    .kpi-warn { border-top: 3px solid var(--warn) !important; }
+    .kpi-brand { border-top: 3px solid var(--brand) !important; }
+    .kanban-col { min-height: 400px; transition: background .2s; }
+    .kanban-col.drag-over { background: rgba(201,168,76,.06); border-color: var(--brand) !important; }
+    .kanban-card { cursor: grab; transition: all .2s; user-select: none; }
+    .kanban-card:active { cursor: grabbing; opacity: .7; transform: rotate(1deg) scale(1.02); }
+    .kanban-card:hover { border-color: rgba(201,168,76,.4); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .crm-card { transition: all .2s; cursor: pointer; }
+    .crm-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .timeline-item::before { content: ''; position: absolute; left: -25px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
+    .timeline-item { position: relative; padding-left: 20px; border-left: 2px solid var(--border); margin-left: 20px; }
+    .avatar-ring { padding: 2px; border-radius: 50%; background: linear-gradient(135deg, var(--brand), transparent); }
+    .stat-bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+    .stat-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+    .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; color: var(--muted); transition: all .2s; margin: 2px 8px; white-space: nowrap; }
+    .sidebar-item:hover { background: var(--surface); color: var(--text); }
+    .sidebar-item.active { background: rgba(201,168,76,.12); color: var(--brand); font-weight: 600; }
+    .sidebar-item svg { flex-shrink: 0; }
+    .topbar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: var(--sidebar); flex-shrink: 0; }
+    .scanner-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--brand); box-shadow: 0 0 10px var(--brand); animation: scan 2s linear infinite; }
+    .radar-chart { display: grid; place-items: center; }
+    select option { background: var(--bg); }
   </style>
-  
+
   <script>
-    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { background: 'var(--bg-color)', content: 'var(--text-color)', muted: 'var(--text-muted)', surface: 'var(--surface-color)', bordercolor: 'var(--surface-border)', brand: 'var(--brand-color)', brandhover: 'var(--brand-hover)', brandtext: 'var(--brand-text)' }, fontFamily: { sans: ['Inter', 'sans-serif'], drama: ['Playfair Display', 'serif'] } } } }
+    tailwind.config = { darkMode: 'class', theme: { extend: {
+      colors: { bg: 'var(--bg)', content: 'var(--text)', muted: 'var(--muted)', surface: 'var(--surface)', border: 'var(--border)', brand: 'var(--brand)', danger: 'var(--danger)', success: 'var(--success)', warn: 'var(--warn)' },
+      fontFamily: { sans: ['Inter','sans-serif'], drama: ['Playfair Display','serif'] }
+    }}}
   </script>
 </head>
 <body>
-  <div class="noise-overlay"></div>
+  <div class="noise"></div>
   <div id="root"></div>
-
-  <script type="text/babel">
-    const { useState, useEffect, useRef, useLayoutEffect } = React;
-    gsap.registerPlugin(ScrollTrigger);
-
-    const IconTrendingUp = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
-    const IconTrendingDown = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>;
-    const IconClock = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
-    const IconActivity = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>;
-    const IconSun = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>;
-    const IconMoon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>;
-    const IconKanban = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 7v7"/><path d="M12 7v4"/><path d="M16 7v9"/></svg>;
-    const IconUsers = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
-    const IconCpu = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>;
-    const IconFilter = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>;
-
-    // Navbar
-    const Navbar = ({ isDark, toggleTheme, activeTab, setActiveTab }) => {
-      const navRef = useRef(null);
-
-      useEffect(() => {
-        const handleScroll = () => {
-          if (window.scrollY > 50) {
-            navRef.current.classList.add('bg-background/80', 'backdrop-blur-xl', 'border-bordercolor', 'py-4', 'shadow-sm');
-            navRef.current.classList.remove('bg-transparent', 'py-6', 'border-transparent', 'shadow-none');
-          } else {
-            navRef.current.classList.remove('bg-background/80', 'backdrop-blur-xl', 'border-bordercolor', 'py-4', 'shadow-sm');
-            navRef.current.classList.add('bg-transparent', 'py-6', 'border-transparent', 'shadow-none');
-          }
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-      }, []);
-
-      const tabs = [
-        { id: 'form', label: '1. Simulador' },
-        { id: 'crm', label: '2. CRM IA Híbrido' },
-        { id: 'dashboard', label: '3. Painel Expert' },
-        { id: 'kanban', label: '4. Kanban' },
-      ];
-
-      return (
-        <nav ref={navRef} className="fixed top-0 left-0 w-full z-40 transition-all duration-500 border-b border-transparent py-6 shadow-none">
-          <div className="max-w-[90rem] mx-auto px-6 flex justify-between items-center">
-            <div className="text-xl font-bold tracking-tight text-content flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('form')}>
-              <div className="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-brandtext">
-                <IconTrendingUp />
-              </div>
-              <div className="hidden sm:block">EXPERT<span className="text-brand font-drama italic font-normal">Gestão</span></div>
-            </div>
-            
-            <div className="hidden lg:flex gap-8 text-sm font-medium">
-              {tabs.map(tab => (
-                <button 
-                  key={tab.id}
-                  onClick={() => { setActiveTab(tab.id); window.scrollTo(0,0); }}
-                  className={`transition-all pb-1 border-b-2 ${activeTab === tab.id ? 'text-brand border-brand font-bold' : 'text-muted border-transparent hover:text-brand'}`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-4">
-              <button onClick={toggleTheme} className="text-muted hover:text-brand transition-colors p-2 rounded-full border border-bordercolor bg-surface">
-                {isDark ? <IconSun /> : <IconMoon />}
-              </button>
-              <button onClick={() => { setActiveTab('form'); window.scrollTo(0,0); }} className="magnetic-btn bg-brand text-brandtext px-6 py-2 rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg shadow-brand/20">
-                <span>Novo Lead</span>
-              </button>
-            </div>
-          </div>
-        </nav>
-      );
-    };
-
-    // TELA 0: SIMULADOR DE DIAGNÓSTICO
-    const DiagnosticFormTab = ({ setActiveTab }) => {
-      const [isAnalyzing, setIsAnalyzing] = useState(false);
-      const [step, setStep] = useState(0);
-
-      const analyzeLead = () => {
-        setIsAnalyzing(true);
-        setTimeout(() => setStep(1), 1000); 
-        setTimeout(() => setStep(2), 2500); 
-        setTimeout(() => setStep(3), 4000); 
-        setTimeout(() => { setIsAnalyzing(false); setActiveTab('crm'); }, 5000); // Redireciona pro CRM!
-      };
-
-      if (isAnalyzing) {
-        return (
-          <section className="pt-40 pb-24 px-6 min-h-[100dvh] flex items-center justify-center">
-            <div className="bg-surface border border-brand/50 rounded-[2rem] p-10 max-w-md w-full text-center relative overflow-hidden shadow-2xl shadow-brand/20">
-              <div className="scanner-line"></div>
-              <div className="w-20 h-20 mx-auto mb-6 bg-brand/10 text-brand rounded-full flex items-center justify-center animate-pulse"><IconCpu width="40" height="40" /></div>
-              <h2 className="text-2xl font-bold text-content mb-2 font-drama italic">Processamento n8n + AI</h2>
-              <p className="text-muted mb-8">Qualificando Lead e definindo temperatura de compra...</p>
-              
-              <div className="space-y-4 text-sm font-mono text-left">
-                <div className={`p-3 rounded-lg border ${step >= 1 ? 'border-brand text-brand bg-brand/5' : 'border-bordercolor text-muted bg-background'}`}>
-                  {step >= 1 ? '✓ Lead Capturado (Webhook)' : 'Aguardando Webhook...'}
-                </div>
-                <div className={`p-3 rounded-lg border ${step >= 2 ? 'border-brand text-brand bg-brand/5' : 'border-bordercolor text-muted bg-background'}`}>
-                  {step >= 2 ? '✓ IA: Reação no WhatsApp = Quente' : 'Analisando histórico e reações...'}
-                </div>
-                <div className={`p-3 rounded-lg border ${step >= 3 ? 'border-emerald-500 text-emerald-500 bg-emerald-500/5' : 'border-bordercolor text-muted bg-background'}`}>
-                  {step >= 3 ? '✓ Enviando para CRM (Pipeline de Vendas)' : 'Roteando para Expert adequado...'}
-                </div>
-              </div>
-            </div>
-          </section>
-        );
-      }
-
-      return (
-        <section className="pt-40 pb-24 px-6 min-h-[100dvh] flex items-center justify-center">
-          <div className="bg-surface border border-bordercolor rounded-[2rem] p-10 max-w-2xl w-full shadow-xl">
-            <div className="text-center mb-10">
-              <span className="bg-brand/10 text-brand px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase mb-4 inline-block">Módulo de Captura</span>
-              <h1 className="text-4xl font-bold text-content mb-3">Entrada do Lead</h1>
-              <p className="text-muted">Simule um Lead preenchendo o diagnóstico. O n8n capturará os dados e atualizará o CRM Híbrido.</p>
-            </div>
-
-            <div className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-muted mb-2">Nome da Empresa</label>
-                  <input type="text" defaultValue="Tech Solutions Ltda" className="w-full bg-background border border-bordercolor text-content p-4 rounded-xl focus:border-brand outline-none transition-colors" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-muted mb-2">Faturamento Atual Mensal</label>
-                  <select className="w-full bg-background border border-bordercolor text-content p-4 rounded-xl focus:border-brand outline-none transition-colors">
-                    <option selected>R$ 100k a R$ 300k</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-muted mb-2">Engajamento Automático Detectado</label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-bordercolor bg-background text-muted p-4 rounded-xl text-center">Frio (Apenas visualizou)</div>
-                  <div className="border border-bordercolor bg-background text-muted p-4 rounded-xl text-center">Morno (Clicou no Link)</div>
-                  <div className="border border-red-500 bg-red-500/10 text-red-500 p-4 rounded-xl text-center font-medium">Super Quente (Respondeu o Bot)</div>
-                </div>
-              </div>
-
-              <div className="pt-6">
-                <button onClick={analyzeLead} className="magnetic-btn w-full bg-brand text-brandtext p-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-brandhover shadow-lg shadow-brand/20">
-                  <IconCpu /> Qualificar e Enviar pro CRM
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // TELA 1.5: CRM HÍBRIDO (COM INTELIGÊNCIA ARTIFICIAL)
-    const CRMTab = () => {
-      const comp = useRef(null);
-
-      useLayoutEffect(() => {
-        let ctx = gsap.context(() => {
-          gsap.from(".crm-column", { y: 20, opacity: 0, duration: 0.5, stagger: 0.1 });
-        }, comp);
-        return () => ctx.revert();
-      }, []);
-
-      return (
-        <section ref={comp} className="pt-40 pb-24 px-6 min-h-[100dvh]">
-          <div className="max-w-[90rem] mx-auto">
-            <div className="flex justify-between items-center mb-10">
-              <div>
-                <h1 className="text-4xl font-bold mb-2 text-content flex items-center gap-4"><IconFilter /> CRM Híbrido Avalancha</h1>
-                <p className="text-muted">Leads qualificados e atualizados automaticamente pela Inteligência Artificial (n8n).</p>
-              </div>
-              <div className="bg-surface border border-bordercolor p-2 rounded-lg text-sm font-mono text-muted flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-brand animate-pulse"></div> Auto-Update: ATIVO
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              
-              {/* Lead Frio */}
-              <div className="crm-column bg-surface border-t-4 border-slate-500 border-x border-b rounded-2xl p-4">
-                <h3 className="font-bold text-sm mb-4 text-content flex justify-between">🧊 Frio (Pesquisa) <span className="bg-background px-2 rounded">2</span></h3>
-                <div className="space-y-3">
-                  <div className="bg-background border border-bordercolor p-3 rounded-lg">
-                    <h4 className="font-bold text-sm text-content">Distribuidora XYZ</h4>
-                    <p className="text-xs text-muted mb-2">R$ 50k / Mês</p>
-                    <div className="text-[10px] bg-slate-500/10 text-slate-500 px-2 py-1 rounded">IA: Apenas visualizou o anúncio</div>
-                  </div>
-                  <div className="bg-background border border-bordercolor p-3 rounded-lg">
-                    <h4 className="font-bold text-sm text-content">Consultoria ABC</h4>
-                    <p className="text-xs text-muted mb-2">R$ 80k / Mês</p>
-                    <div className="text-[10px] bg-slate-500/10 text-slate-500 px-2 py-1 rounded">IA: Abandonou Formulário</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Lead Morno */}
-              <div className="crm-column bg-surface border-t-4 border-amber-500 border-x border-b rounded-2xl p-4">
-                <h3 className="font-bold text-sm mb-4 text-content flex justify-between">🔥 Morno (Consideração) <span className="bg-background px-2 rounded">1</span></h3>
-                <div className="space-y-3">
-                  <div className="bg-background border border-bordercolor p-3 rounded-lg">
-                    <h4 className="font-bold text-sm text-content">Loja do Centro</h4>
-                    <p className="text-xs text-muted mb-2">R$ 150k / Mês</p>
-                    <div className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-1 rounded">IA: Clicou no link de WhatsApp (Aguardando Mensagem)</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Lead Quente / Super Quente */}
-              <div className="crm-column bg-surface border-t-4 border-red-500 border-x border-b rounded-2xl p-4 shadow-lg">
-                <h3 className="font-bold text-sm mb-4 text-content flex justify-between">🚨 Super Quente (Pronto) <span className="bg-red-500/20 text-red-500 px-2 rounded">Novo!</span></h3>
-                <div className="space-y-3">
-                  <div className="bg-background border-2 border-red-500/50 p-3 rounded-lg shadow-[0_0_15px_rgba(239,68,68,0.1)]">
-                    <h4 className="font-bold text-sm text-content">Tech Solutions Ltda</h4>
-                    <p className="text-xs text-muted mb-2">R$ 300k / Mês</p>
-                    <div className="text-[10px] bg-red-500/20 text-red-500 font-bold px-2 py-1 rounded mb-2">IA: Respondeu Bot, pediu preço!</div>
-                    <button className="w-full bg-brand text-brandtext text-xs py-1.5 rounded font-bold hover:opacity-80">Enviar para Expert</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Convertido / Cliente */}
-              <div className="crm-column bg-surface border-t-4 border-emerald-500 border-x border-b rounded-2xl p-4">
-                <h3 className="font-bold text-sm mb-4 text-content flex justify-between">✅ Convertidos (Clientes) <span className="bg-background px-2 rounded">3</span></h3>
-                <div className="space-y-3 opacity-70 hover:opacity-100 transition-opacity">
-                  <div className="bg-background border border-emerald-500/30 p-3 rounded-lg">
-                    <h4 className="font-bold text-sm text-content line-through">Grupo Alfa</h4>
-                    <p className="text-xs text-emerald-500 font-bold">Fechado: R$ 5.000,00</p>
-                  </div>
-                  <div className="bg-background border border-emerald-500/30 p-3 rounded-lg">
-                    <h4 className="font-bold text-sm text-content line-through">Varejo Sul</h4>
-                    <p className="text-xs text-emerald-500 font-bold">Fechado: R$ 8.500,00</p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // TELA 2: DASHBOARD GERAL E EXPERTS
-    const DashboardTab = () => {
-      const kpis = [
-        { title: "Taxa de Vendas", value: "R$ 124.500", trend: "+12%", status: "positive", icon: <IconTrendingUp /> },
-        { title: "Ineficiência", value: "28%", trend: "Perda: R$ 34k", status: "critical", icon: <IconTrendingDown /> },
-        { title: "Velocidade", value: "4.2 Dias", trend: "Estável", status: "neutral", icon: <IconClock /> },
-        { title: "Ticket Médio", value: "R$ 1.850", trend: "+5%", status: "positive", icon: <IconActivity /> },
-      ];
-
-      return (
-        <div>
-          <section className="relative pt-40 pb-24 px-6 border-b border-bordercolor">
-            <div className="absolute inset-0 z-0">
-              <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover opacity-20 dark:opacity-40" />
-              <div className="absolute inset-0 hero-gradient"></div>
-            </div>
-            <div className="relative z-10 max-w-7xl mx-auto w-full">
-              <div className="max-w-4xl">
-                <div className="inline-block border border-brand/30 text-brand bg-brand/5 px-4 py-1 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">Visão do Cliente: Tech Solutions Ltda</div>
-                <h1 className="text-5xl md:text-7xl leading-tight mb-8">
-                  <span className="block font-bold tracking-tight text-content">Gargalo Crítico</span>
-                  <span className="block font-drama italic text-brand font-light">detectado.</span>
-                </h1>
-                <p className="text-lg md:text-xl text-muted max-w-2xl font-light">Após conversão no CRM, a IA escalou este projeto para o Expert de Recuperação de Vendas para evitar a sangria de R$34k/mês.</p>
-              </div>
-            </div>
-          </section>
-
-          {/* Cards KPI - O que dá a cara de SaaS de verdade */}
-          <section className="kpis-section py-24 bg-background relative z-10 px-6">
-            <div className="max-w-7xl mx-auto">
-              <h2 className="text-3xl font-bold mb-8 text-content">Métricas <span className="font-drama italic text-brand font-light">Tech Solutions</span></h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {kpis.map((kpi, index) => (
-                  <div key={index} className="bg-surface border border-bordercolor rounded-[2rem] p-8 relative overflow-hidden shadow-xl shadow-black/5 hover:border-brand/30 transition-colors">
-                    <div className={`absolute top-0 right-0 w-32 h-32 blur-3xl opacity-10 ${kpi.status === 'critical' ? 'bg-red-500' : kpi.status === 'positive' ? 'bg-emerald-500' : 'bg-brand'}`}></div>
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-6 relative z-10 ${kpi.status === 'critical' ? 'bg-red-500/10 text-red-500' : kpi.status === 'positive' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-brand/10 text-brand'}`}>
-                      {kpi.icon}
-                    </div>
-                    <h3 className="text-muted font-medium mb-2">{kpi.title}</h3>
-                    <div className="text-3xl font-bold font-drama text-content mb-4">{kpi.value}</div>
-                    <div className={`text-sm font-medium ${kpi.status === 'critical' ? 'text-red-500' : kpi.status === 'positive' ? 'text-emerald-500' : 'text-brand'}`}>{kpi.trend}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Section Experts */}
-          <section className="py-24 bg-surface relative z-10 px-6 border-t border-bordercolor">
-            <div className="max-w-7xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                  <h2 className="text-4xl font-bold mb-6 text-content">Ação Corretiva Imediata</h2>
-                  <div className="bg-background border border-red-500/20 rounded-[2rem] p-6 flex flex-col sm:flex-row gap-6 items-center shadow-lg hover:border-red-500/50 transition-colors">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop" className="w-20 h-20 rounded-full object-cover border-2 border-bordercolor" />
-                    <div className="flex-1 text-left w-full sm:w-auto">
-                      <div className="flex items-center gap-3 mb-1">
-                        <h4 className="font-bold text-lg text-content">Marcos Almeida</h4>
-                        <span className="text-xs font-mono bg-red-500/10 text-red-500 px-2 py-1 rounded-full border border-red-500/20">EXPERT ACIONADO</span>
-                      </div>
-                      <p className="text-sm text-muted">Vendas & Ineficiência. Custo do Gargalo: R$34k / mês.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="relative hidden lg:block">
-                  <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop" className="rounded-[3rem] grayscale-[0.2] border border-bordercolor object-cover h-[300px] w-full shadow-2xl" />
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      );
-    };
-
-    // TELA 3: KANBAN (DRAG AND DROP INTEGRADO)
-    const KanbanTab = () => {
-      const [columns, setColumns] = useState([
-        { id: 'col1', title: "Backlog (Gargalos)", color: "border-bordercolor", items: [{ id: 't1', text: "Auditoria Comercial" }, { id: 't2', text: "Revisão LTV" }] },
-        { id: 'col2', title: "Em Execução", color: "border-brand", items: [{ id: 't3', text: "Treinamento Script de Vendas (Tech Solutions)" }] },
-        { id: 'col3', title: "Concluído", color: "border-emerald-500/50", items: [{ id: 't4', text: "Diagnóstico Inicial" }] }
-      ]);
-      const [draggedItem, setDraggedItem] = useState(null);
-
-      const handleDragStart = (e, item, sourceColId) => {
-        setDraggedItem({ item, sourceColId });
-        e.target.style.opacity = '0.5';
-      };
-
-      const handleDragEnd = (e) => {
-        e.target.style.opacity = '1';
-        setDraggedItem(null);
-      };
-
-      const handleDragOver = (e) => { e.preventDefault(); };
-
-      const handleDrop = (e, targetColId) => {
-        e.preventDefault();
-        if (!draggedItem) return;
-
-        if (draggedItem.sourceColId === targetColId) return;
-
-        setColumns(prev => prev.map(col => {
-          if (col.id === draggedItem.sourceColId) {
-            return { ...col, items: col.items.filter(i => i.id !== draggedItem.item.id) };
-          }
-          if (col.id === targetColId) {
-            return { ...col, items: [...col.items, draggedItem.item] };
-          }
-          return col;
-        }));
-      };
-
-      return (
-        <section className="pt-40 pb-24 px-6 min-h-[100dvh]">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl font-bold mb-4 text-content flex items-center gap-4"><IconKanban /> Plano de Ação dos Experts</h1>
-            <p className="text-muted mb-12">Arraste os cartões entre as colunas para simular a execução pelo Expert.</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {columns.map((col) => (
-                <div 
-                  key={col.id} 
-                  className={`bg-surface border-t-4 ${col.color} border-x border-b rounded-2xl p-6 shadow-lg min-h-[300px] transition-colors`}
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, col.id)}
-                >
-                  <h3 className="font-bold text-lg mb-6 text-content flex justify-between">{col.title} <span className="text-muted text-sm font-normal">{col.items.length}</span></h3>
-                  <div className="space-y-4 min-h-[200px]">
-                    {col.items.map((item) => (
-                      <div 
-                        key={item.id} 
-                        draggable="true"
-                        onDragStart={(e) => handleDragStart(e, item, col.id)}
-                        onDragEnd={handleDragEnd}
-                        className="bg-background border border-bordercolor p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-brand/50 hover:shadow-md transition-all"
-                      >
-                        <h4 className="text-content font-medium text-sm select-none">{item.text}</h4>
-                        <div className="mt-3 flex justify-between items-center">
-                          <span className="text-[10px] uppercase font-bold bg-surface border border-bordercolor px-2 py-1 rounded text-muted">Ação Prática</span>
-                          <img src={`https://i.pravatar.cc/150?img=${item.id.replace('t','') * 10}`} className="w-5 h-5 rounded-full" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    const App = () => {
-      const [isDark, setIsDark] = useState(true);
-      const [activeTab, setActiveTab] = useState('form'); 
-
-      useEffect(() => {
-        if (isDark) { document.documentElement.classList.add('dark'); } 
-        else { document.documentElement.classList.remove('dark'); }
-      }, [isDark]);
-
-      const toggleTheme = () => setIsDark(!isDark);
-
-      return (
-        <div className="antialiased selection:bg-brand selection:text-brandtext transition-colors duration-300">
-          <Navbar isDark={isDark} toggleTheme={toggleTheme} activeTab={activeTab} setActiveTab={setActiveTab} />
-          <main>
-            {activeTab === 'form' && <DiagnosticFormTab setActiveTab={setActiveTab} />}
-            {activeTab === 'crm' && <CRMTab />}
-            {activeTab === 'dashboard' && <DashboardTab />}
-            {activeTab === 'kanban' && <KanbanTab />}
-          </main>
-          <footer className="bg-surface pt-10 pb-10 px-6 rounded-t-[4rem] relative z-10 border-t border-bordercolor mt-10">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="text-xl font-bold text-content flex items-center gap-2">EXPERT<span className="text-brand font-drama italic font-normal">Gestão</span></div>
-              <div className="flex items-center gap-3 bg-background border border-bordercolor px-4 py-2 rounded-full">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span className="text-xs font-mono text-emerald-500">N8N AI AGENTS - ONLINE & READY</span>
-              </div>
-            </div>
-          </footer>
-        </div>
-      );
-    };
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
+  <script type="text/babel" src="components/icons.js"></script>
+  <script type="text/babel" src="components/auth.js"></script>
+  <script type="text/babel" src="components/sidebar.js"></script>
+  <script type="text/babel" src="components/dashboard.js"></script>
+  <script type="text/babel" src="components/crm.js"></script>
+  <script type="text/babel" src="components/kanban.js"></script>
+  <script type="text/babel" src="components/experts.js"></script>
+  <script type="text/babel" src="components/clients.js"></script>
+  <script type="text/babel" src="components/reports.js"></script>
+  <script type="text/babel" src="components/diagnostic.js"></script>
+  <script type="text/babel" src="components/settings.js"></script>
+  <script type="text/babel" src="app.js"></script>
 </body>
 </html>
