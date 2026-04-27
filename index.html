@@ -304,6 +304,13 @@
 
     // TELA 2: DASHBOARD GERAL E EXPERTS
     const DashboardTab = () => {
+      const kpis = [
+        { title: "Taxa de Vendas", value: "R$ 124.500", trend: "+12%", status: "positive", icon: <IconTrendingUp /> },
+        { title: "Ineficiência", value: "28%", trend: "Perda: R$ 34k", status: "critical", icon: <IconTrendingDown /> },
+        { title: "Velocidade", value: "4.2 Dias", trend: "Estável", status: "neutral", icon: <IconClock /> },
+        { title: "Ticket Médio", value: "R$ 1.850", trend: "+5%", status: "positive", icon: <IconActivity /> },
+      ];
+
       return (
         <div>
           <section className="relative pt-40 pb-24 px-6 border-b border-bordercolor">
@@ -322,16 +329,47 @@
               </div>
             </div>
           </section>
-          {/* Section Experts - Resumido */}
-          <section className="py-24 bg-background relative z-10 px-6">
-            <div className="max-w-7xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-8 text-content">Expert Alocado</h2>
-              <div className="inline-flex items-center gap-6 bg-surface border border-brand/30 p-6 rounded-3xl shadow-xl">
-                 <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop" className="w-20 h-20 rounded-full object-cover border-2 border-brand" />
-                 <div className="text-left">
-                   <h3 className="text-2xl font-bold text-content">Marcos Almeida</h3>
-                   <p className="text-muted">Responsável por solucionar: Perda de Vendas</p>
-                 </div>
+
+          {/* Cards KPI - O que dá a cara de SaaS de verdade */}
+          <section className="kpis-section py-24 bg-background relative z-10 px-6">
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-3xl font-bold mb-8 text-content">Métricas <span className="font-drama italic text-brand font-light">Tech Solutions</span></h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {kpis.map((kpi, index) => (
+                  <div key={index} className="bg-surface border border-bordercolor rounded-[2rem] p-8 relative overflow-hidden shadow-xl shadow-black/5 hover:border-brand/30 transition-colors">
+                    <div className={`absolute top-0 right-0 w-32 h-32 blur-3xl opacity-10 ${kpi.status === 'critical' ? 'bg-red-500' : kpi.status === 'positive' ? 'bg-emerald-500' : 'bg-brand'}`}></div>
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-6 relative z-10 ${kpi.status === 'critical' ? 'bg-red-500/10 text-red-500' : kpi.status === 'positive' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-brand/10 text-brand'}`}>
+                      {kpi.icon}
+                    </div>
+                    <h3 className="text-muted font-medium mb-2">{kpi.title}</h3>
+                    <div className="text-3xl font-bold font-drama text-content mb-4">{kpi.value}</div>
+                    <div className={`text-sm font-medium ${kpi.status === 'critical' ? 'text-red-500' : kpi.status === 'positive' ? 'text-emerald-500' : 'text-brand'}`}>{kpi.trend}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Section Experts */}
+          <section className="py-24 bg-surface relative z-10 px-6 border-t border-bordercolor">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                  <h2 className="text-4xl font-bold mb-6 text-content">Ação Corretiva Imediata</h2>
+                  <div className="bg-background border border-red-500/20 rounded-[2rem] p-6 flex flex-col sm:flex-row gap-6 items-center shadow-lg hover:border-red-500/50 transition-colors">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop" className="w-20 h-20 rounded-full object-cover border-2 border-bordercolor" />
+                    <div className="flex-1 text-left w-full sm:w-auto">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h4 className="font-bold text-lg text-content">Marcos Almeida</h4>
+                        <span className="text-xs font-mono bg-red-500/10 text-red-500 px-2 py-1 rounded-full border border-red-500/20">EXPERT ACIONADO</span>
+                      </div>
+                      <p className="text-sm text-muted">Vendas & Ineficiência. Custo do Gargalo: R$34k / mês.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative hidden lg:block">
+                  <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop" className="rounded-[3rem] grayscale-[0.2] border border-bordercolor object-cover h-[300px] w-full shadow-2xl" />
+                </div>
               </div>
             </div>
           </section>
